@@ -1,32 +1,20 @@
 package com.hexaware.petp.entity;
 import java.time.LocalDateTime;
 
-import com.hexaware.petp.dao.ItemDonation;
+import java.time.LocalDate;
 
-public class CashDonation extends ItemDonation {
-  
-    private LocalDateTime donationDate;
+public abstract class CashDonation extends Donation {
+    private LocalDate donationDate;
 
-    
-    public CashDonation(String donorName, double amount, LocalDateTime donationDate) {
+    public CashDonation(String donorName, double amount, LocalDate donationDate) {
         super(donorName, amount);
         this.donationDate = donationDate;
     }
 
-  
-    @Override
-    public void recordDonation() {
-       
-        System.out.println("Cash donation recorded for donor: " + getDonorName() +
-                ", Amount: $" + getAmount() + ", Date: " + donationDate);
-    }
+    public LocalDate getDonationDate() { return donationDate; }
+    public void setDonationDate(LocalDate donationDate) { this.donationDate = donationDate; }
 
-   
-    public static void main(String[] args) {
-        
-        CashDonation cashDonation = new CashDonation("John Doe", 100.50, LocalDateTime.now());
-
-    
-        cashDonation.recordDonation();
+    public void recordDonation(String amount) {
+        System.out.println("Cash donation recorded from " + donorName + " on " + donationDate + " of amount $" + amount);
     }
 }
