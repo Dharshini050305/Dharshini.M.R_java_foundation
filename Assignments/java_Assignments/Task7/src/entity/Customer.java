@@ -79,4 +79,9 @@ public class Customer {
 	        System.out.println("Phone: " + phoneNumber);
 	        System.out.println("Address: " + address);
 	    }
+	    @Override
+	    public String toString() {
+	        return "Customer [customerId=" + customerID + ", firstName=" + firstName + ", lastName=" + lastName
+	                + ", emailAddress=" + email + ", phoneNumber=" + phoneNumber + ", address=" + address + "]";
+	    }
 	}
