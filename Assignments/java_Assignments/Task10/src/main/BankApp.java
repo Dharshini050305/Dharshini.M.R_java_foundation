@@ -1,14 +1,14 @@
 package main;
 
 import entity.Customer;
-import service.Bank;
+import service.BankImpl;
 
 import java.util.Scanner;
 
 public class BankApp {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Bank bank = new Bank();
+        BankImpl bank = new BankImpl();
 
         System.out.println("----- Welcome to the Banking System -----");
 
@@ -22,7 +22,7 @@ public class BankApp {
             System.out.println("6. getAccountDetails");
             System.out.println("7. exit");
             System.out.print("Enter your command: ");
-            String command = scanner.nextLine().trim();
+            String command = scanner.nextLine();
 
             switch (command.toLowerCase()) {
                 case "create_account":

@@ -2,9 +2,9 @@ package entity;
 
 public class Customer {
 	
-	  private int customerId;       // Unique identifier for the customer.
-	    private String customerName;  // Name of the customer.
-	    private String customerContact; // Contact details of the customer.
+	  private int customerId;       
+	    private String customerName;  
+	    private String customerContact; 
 
 	    // Constructor
 	    public Customer(int customerId, String customerName, String customerContact) {
@@ -47,4 +47,6 @@ public class Customer {
 	                ", customerContact='" + customerContact + '\'' +
 	                '}';
 	    }
+
+	
 	}

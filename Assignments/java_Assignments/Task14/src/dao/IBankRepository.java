@@ -1,16 +1,26 @@
 package dao;
 
 import entity.Account;
-import java.sql.SQLException;
+import entity.Customer;
+
+import entity.Transactions;
+import exception.InsufficientFundException;
+import exception.InvalidAccountException;
+import exception.OverDraftLimitExceededException;
+
+import java.sql.Date;
 import java.util.List;
 
 public interface IBankRepository {
-    void createAccount(long accountNumber, String accountType, double initialBalance, double extra) throws SQLException;
-    void deposit(long accountNumber, double amount) throws SQLException;
-    void withdraw(long accountNumber, double amount) throws SQLException;
-    double getAccountBalance(long accountNumber) throws SQLException;
-    Account getAccountByAccountNumber(long accountNumber) throws SQLException;
-    List<Account> listAccounts() throws SQLException;
-    void transfer(long fromAccount, long toAccount, double amount) throws SQLException;
-    Account getAccountDetails(long accountNumber) throws SQLException;
+	 void createAccount(Customer customer, long accountid, String accounttype, float balance);
+
+	    List<Account> listAccounts();
+
+	    float getBalance(long accountid);
+
+	    void deposit(long accountid, float amount) throws Exception;
+
+	    void withdraw(long accountid, float amount) throws OverDraftLimitExceededException, InsufficientFundException, InvalidAccountException;
+
+		List<Transactions> getTransactionsBetweenDate(long accountid, String fromDate, String toDate);
 }

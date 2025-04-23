@@ -1,11 +1,11 @@
 package entity;
 
 public class Account {
-	 private static long lastAccNo = 1000L; // Static variable for auto-generating account numbers.
-	    private long accountNumber;          // Unique account identifier.
-	    private String accountType;          // Type of account (e.g., Savings, Current).
-	    private float accountBalance;        // Account balance.
-	    private Customer customer;           // Customer associated with this account.
+	 private static long lastAccNo = 1000L; 
+	    private long accountNumber;          
+	    private String accountType;          
+	    private float accountBalance;        
+	    private Customer customer;           
 
 	    // Constructor
 	    public Account(String accountType, float accountBalance, Customer customer) {
@@ -86,4 +86,12 @@ public class Account {
 			
 			return lastAccNo++;
 		}
+		@Override
+		public String toString() {
+			return "Account Details:\n" +
+			           "Account Number: " + accountNumber + "\n" +
+			           "Account Type: " + accountType + "\n" +
+			           "Account Balance: " + accountBalance + "\n" 
+			           ; // assumes Customer has a useful toString()
+			}
 }

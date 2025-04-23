@@ -1,20 +1,15 @@
 package entity;
 
 public class SavingsAccount extends Account {
-    private double interestRate;
-
-    // Constructor for SavingsAccount
-    public SavingsAccount(long accountNumber, double balance, Customer customer, double interestRate) {
-        super(accountNumber, balance, customer);
+	public SavingsAccount(double interestRate, Customer customer) {
+        super("Savings", 500.0, customer);
         this.interestRate = interestRate;
     }
 
+    private final double interestRate;
     @Override
-    public String getAccountType() {
-        return "Savings";
+    public void printAccountInfo() {
+        super.printAccountInfo();
+        System.out.println("Interest Rate: " + interestRate + "%");
     }
-
-    public double getInterestRate() {
-        return interestRate;
     }
-}

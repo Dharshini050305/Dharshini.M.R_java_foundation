@@ -1,16 +1,14 @@
 package entity;
 
 public class ZeroBalanceAccount extends Account{
-	public ZeroBalanceAccount(Customer customer) {
-        super("ZeroBalance", 0, customer);
-    }
+	  public ZeroBalanceAccount(Customer customer) {
+	        super("Zero Balance", 0.0F, customer);
+	    }
 
-
-
-	private float getAccountBalance() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	    @Override
+	    public void printAccountInfo() {
+	        super.printAccountInfo();
+	    }
 }
 
 

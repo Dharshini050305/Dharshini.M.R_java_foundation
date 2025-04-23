@@ -6,7 +6,7 @@ public class Account {
 	    private String accountType;
 	    protected float accountBalance;
 	    private Customer customer;
-	    //private static final float INTEREST_RATE = 4.5f;
+	    private static final float INTEREST_RATE = 4.5f;
 
 	    // Default Constructor
 	    public Account() {

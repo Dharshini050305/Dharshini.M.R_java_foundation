@@ -1,9 +1,12 @@
 package service;
 
+import java.util.Map;
+
+import entity.Account;
 import entity.Customer;
 public interface IBankServiceProvider {
-	  void create_account(Customer customer, String accType, float balance);
-	    void listAccounts();
-	    void calculateInterest();
+	 void createAccount(Customer customer, long accountid, String accounttype, double balance);
+
+	    Map<Long, Account> listAccounts();
 
 }

@@ -1,7 +1,10 @@
 package exception;
 
 public class InvalidAccountException extends RuntimeException {
-    public InvalidAccountException(String message) {
+   
+	private static final long serialVersionUID = 1L;
+
+	public InvalidAccountException(String message) {
         super(message);
     }
 }

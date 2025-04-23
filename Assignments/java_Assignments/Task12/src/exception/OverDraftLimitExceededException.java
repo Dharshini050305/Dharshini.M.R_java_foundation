@@ -1,7 +1,10 @@
 package exception;
 
 public class OverDraftLimitExceededException extends Exception {
-    public OverDraftLimitExceededException(String message) {
+    
+	private static final long serialVersionUID = 1L;
+
+	public OverDraftLimitExceededException(String message) {
         super(message);
     }
 }

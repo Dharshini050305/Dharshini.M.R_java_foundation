@@ -3,7 +3,6 @@ package service;
 import entity.Account;
 import entity.Customer;
 import entity.SavingsAccount;
-import exception.InsufficientFundException;
 import exception.InvalidAccountException;
 import exception.OverDraftLimitExceededException;
 

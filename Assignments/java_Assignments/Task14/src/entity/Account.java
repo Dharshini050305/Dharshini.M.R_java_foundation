@@ -1,57 +1,51 @@
 package entity;
 
-public abstract class Account {
-    private long accountNumber;
+public  class Account {
+	private long accountid;
+    private String accounttype;
     private double balance;
     private Customer customer;
 
-    public Account(long accountNumber, double balance, Customer customer) {
-        this.accountNumber = accountNumber;
+    public Account(String accounttype, double balance, Customer customer) {
+        this.accounttype = accounttype;
         this.balance = balance;
         this.customer = customer;
     }
 
-    // Getters and Setters
-    public long getAccountNumber() {
-        return accountNumber;
+    public long getAccountid() {
+        return accountid;
+    }
+
+    public String getAccounttype() {
+        return accounttype;
     }
 
     public double getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
     public Customer getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
-    // Abstract method to get account type
-    public abstract String getAccountType();
-
-    // Deposit and Withdraw methods
-    public void deposit(double amount) {
-        if (amount > 0) {
-            this.balance += amount;
-        } else {
-            throw new IllegalArgumentException("Deposit amount must be positive.");
-        }
+    public void setAccountid(long accountid) {
+        this.accountid = accountid;
     }
 
-    public void withdraw(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Withdrawal amount must be positive.");
-        }
-        if (amount <= this.balance) {
-            this.balance -= amount;
-        } else {
-            throw new IllegalArgumentException("Insufficient funds.");
-        }
+    public void printAccountInfo() {
+        System.out.println("Account Number: " + accountid);
+        System.out.println("Account Type: " + accounttype);
+        System.out.println("Account Balance: $" + balance);
+        System.out.println("Customer Information:");
+        customer.printInfo();
+    }
+
+    public static long generateAccountid() {
+        
+        return System.currentTimeMillis(); // Example only
     }
 }

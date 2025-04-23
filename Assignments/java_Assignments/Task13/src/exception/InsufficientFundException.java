@@ -1,7 +1,10 @@
 package exception;
 
 public class InsufficientFundException extends Exception{
-	 public InsufficientFundException(String message) {
+	
+	private static final long serialVersionUID = 1L;
+
+	public InsufficientFundException(String message) {
 	        super(message);
 	    }
 }

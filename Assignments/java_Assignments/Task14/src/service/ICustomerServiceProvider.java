@@ -1,12 +1,21 @@
 package service;
 
-import entity.Account;
-import java.sql.SQLException;
+import entity.Transactions;
+import exception.InvalidAccountException;
+
+import java.util.List;
 
 public interface ICustomerServiceProvider {
-    double getAccountBalance(long accountNumber) throws SQLException;
-    void deposit(long accountNumber, double amount) throws SQLException;
-    void withdraw(long accountNumber, double amount) throws SQLException;
-    void transfer(long fromAccount, long toAccount, double amount) throws SQLException;
-    Account getAccountDetails(long accountNumber) throws SQLException;
+	double getBalance(long accountid) throws InvalidAccountException;
+
+    double deposit(long accountid, double amount) throws Exception;
+
+    double withdraw(long accountid, double amount) throws Exception;
+
+    void transfer(long fromAccountid, long toAccountid, double amount) throws Exception;
+
+    String getAccountDetails(long accountid) throws InvalidAccountException;
+
+	List<Transactions> getTransactionsBetweenDate(long accountid, String startDate, String endDate);
+
 }

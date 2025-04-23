@@ -1,161 +1,325 @@
 package presentation;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
-import service.BankServiceProviderImpl;
-import entity.Account;
+
+
+import dao.BankRepositoryImpl;
+import dao.IBankRepository;
 import entity.Customer;
 import entity.SavingsAccount;
+import entity.Transactions;
+import entity.Account;
 import entity.CurrentAccount;
 import entity.ZeroBalanceAccount;
+import exception.InsufficientFundException;
+import exception.InvalidAccountException;
+import exception.OverDraftLimitExceededException;
+import service.BankServiceProviderImpl;
+import service.IBankServiceProvider;
 
 public class BankApp {
-    public static void main(String[] args) {
-        // Scanner for user input
-        Scanner scanner = new Scanner(System.in);
+	 private static String lastname;
+		private static String firstname;
+		private static int customerid;
+		private static long phonenumber;
+		private static long accountid;
 
-        // Create an instance of BankServiceProviderImpl
-        BankServiceProviderImpl bankServiceProvider = new BankServiceProviderImpl();
+		public static void main(String[] args) throws Exception {
+		        IBankServiceProvider bankServiceProvider = new BankServiceProviderImpl();
+		        Scanner scanner = new Scanner(System.in);
 
-        // User Interface
-        while (true) {
-            System.out.println("\n=== Welcome to the Bank App ===");
-            System.out.println("1. Create Account");
-            System.out.println("2. Deposit");
-            System.out.println("3. Withdraw");
-            System.out.println("4. Transfer");
-            System.out.println("5. Check Balance");
-            System.out.println("6. Exit");
+		        int choice;
+		        do {
+		            System.out.println("<------ Banking System Menu ------>");
+		            System.out.println("1. Create New Account");
+		            System.out.println("2. Deposit into Account");
+		            System.out.println("3. Withdraw Amount");
+		            System.out.println("4. Get Balance of the Account");
+		            System.out.println("5. Transfer to others");
+		            System.out.println("6. Get Account Details");
+		            System.out.println("7. List all the Accounts");
+		            System.out.println("8. Check Transactions Between Date");
+		            System.out.println("9. Exit Banking System ");
 
-            System.out.print("Please choose an option (1-6): ");
-            int choice = scanner.nextInt();
+		            System.out.print("Please Enter your choice: ");
+		            choice = scanner.nextInt();
 
-            switch (choice) {
-                case 1: // Create Account
-                    createAccount(scanner, bankServiceProvider);
-                    break;
+		            switch (choice) {
+		                case 1:
+		                    createAccountMenu(bankServiceProvider, scanner);
+		                    break;
+		                case 2:
+		                    depositMenu(bankServiceProvider, scanner);
+		                    break;
+		                case 3:
+		                    withdrawMenu(bankServiceProvider, scanner);
+		                    break;
+		                case 4:
+		                    getBalanceMenu(bankServiceProvider, scanner);
+		                    break;
+		                case 5:
+		                    transferMenu(bankServiceProvider, scanner);
+		                    break;
+		                case 6:
+		                    getAccountDetailsMenu(bankServiceProvider, scanner);
+		                    break;
+		                case 7:
+		                    listAccounts(bankServiceProvider);
+		                    break;
+		                case 8:
+		                    getTransactionsBetweenDate(bankServiceProvider, scanner);
+		                    break;
+		                case 9:
+		                    System.out.println("Exiting the Banking System. Goodbye!");
+		                    break;
+		                default:
+		                    System.out.println("Invalid choice. Please enter a valid option.");
+		            }
 
-                case 2: // Deposit
-                    System.out.print("Enter Account Number: ");
-                    long depositAccountNumber = scanner.nextLong();
-                    System.out.print("Enter Deposit Amount: ");
-                    double depositAmount = scanner.nextDouble();
-                    try {
-                        bankServiceProvider.deposit(depositAccountNumber, depositAmount);
-                        System.out.println("Amount Deposited Successfully!");
-                    } catch (Exception e) {
-                        System.out.println("Error: " + e.getMessage());
-                    }
-                    break;
+		        } while (choice != 9);
 
-                case 3: // Withdraw
-                    System.out.print("Enter Account Number: ");
-                    long withdrawAccountNumber = scanner.nextLong();
-                    System.out.print("Enter Withdrawal Amount: ");
-                    double withdrawAmount = scanner.nextDouble();
-                    try {
-                        bankServiceProvider.withdraw(withdrawAccountNumber, withdrawAmount);
-                        System.out.println("Amount Withdrawn Successfully!");
-                    } catch (Exception e) {
-                        System.out.println("Error: " + e.getMessage());
-                    }
-                    break;
+		        scanner.close();
+		    }
 
-                case 4: // Transfer
-                    System.out.print("Enter From Account Number: ");
-                    long fromAccount = scanner.nextLong();
-                    System.out.print("Enter To Account Number: ");
-                    long toAccount = scanner.nextLong();
-                    System.out.print("Enter Transfer Amount: ");
-                    double transferAmount = scanner.nextDouble();
-                    try {
-                        bankServiceProvider.transfer(fromAccount, toAccount, transferAmount);
-                        System.out.println("Transfer Successful!");
-                    } catch (Exception e) {
-                        System.out.println("Transfer Failed: " + e.getMessage());
-                    }
-                    break;
+		       private static void createAccountMenu(IBankServiceProvider bankServiceProvider, Scanner scanner) {
+		        System.out.println("<----- Create Account Menu ----->");
+		        System.out.println("Select the type of account that you wish to create");
+		        System.out.println("1. Savings Account");
+		        System.out.println("2. Current Account");
+		        System.out.println("3. ZeroBalance");
 
-                case 5: // Check Balance
-                    System.out.print("Enter Account Number: ");
-                    long balanceAccountNumber = scanner.nextLong();
-                    try {
-                        double balance = bankServiceProvider.getAccountBalance(balanceAccountNumber);
-                        System.out.println("Account Balance: " + balance);
-                    } catch (Exception e) {
-                        System.out.println("Error: " + e.getMessage());
-                    }
-                    break;
+		        System.out.print("Enter account type choice: ");
+		        int accountTypeChoice = scanner.nextInt();
 
-                case 6: // Exit
-                    System.out.println("Thank you for using the Bank App!");
-                    scanner.close();
-                    System.exit(0);
-                    break;
+		        System.out.print("Enter customer ID: ");
+		        int customerid = scanner.nextInt();
 
-                default:
-                    System.out.println("Invalid Option! Please choose a valid option (1-6).");
-                    break;
-            }
-        }
-    }
+		        System.out.print("Enter first name: ");
+		        String firstname = scanner.next();
 
-    private static void createAccount(Scanner scanner, BankServiceProviderImpl bankServiceProvider) {
-        // Collect customer details first
-        System.out.print("Enter Customer ID: ");
-        long customerId = scanner.nextLong();
-        System.out.print("Enter Customer Name: ");
-        String customerName = scanner.next();
-        System.out.print("Enter Customer Contact Number: ");
-        String contactNumber = scanner.next();
+		        System.out.print("Enter last name: ");
+		        String lastname = scanner.next();
 
-        // Create a customer instance
-        Customer customer = new Customer(customerId, customerName, contactNumber);
+		        System.out.print("Enter email address: ");
+		        String email = scanner.next();
 
-        // Ask for account type and handle based on type
-        System.out.print("Enter Account Type (Savings/Current/ZeroBalance): ");
-        String accountType = scanner.next();
+		        System.out.print("Enter phone number: ");
+		        String phonenumber = scanner.next();
 
-        // Generate account number
-        long accountNumber = generateAccountNumber(); // Generate account number after gathering details
-        System.out.println("Generated Account Number: " + accountNumber);
+		        System.out.print("Enter address: ");
+		        String address = scanner.next();
 
-        // Ask for the balance to initialize the account
-        System.out.print("Enter Account Balance: ");
-        double balance = scanner.nextDouble();
+		        System.out.print("Enter Date of Birth (yyyy-MM-dd): ");
+		        String DOB = scanner.next();
 
-        // Based on account type, create the corresponding account
-        switch (accountType.toLowerCase()) {
-            case "savings":
-                System.out.print("Enter Interest Rate for Savings Account: ");
-                double interestRate = scanner.nextDouble();
-                SavingsAccount savingsAccount = new SavingsAccount(accountNumber, balance, customer, interestRate);
-                bankServiceProvider.createAccount(savingsAccount);
-                System.out.println("Savings Account Created Successfully!");
-                break;
+		        Customer customer = new Customer(customerid, firstname, lastname, email, phonenumber, address, DOB);
 
-            case "current":
-                System.out.print("Enter Overdraft Limit for Current Account: ");
-                double overdraftLimit = scanner.nextDouble();
-                CurrentAccount currentAccount = new CurrentAccount(accountNumber, balance, customer, overdraftLimit);
-                bankServiceProvider.createAccount(currentAccount);
-                System.out.println("Current Account Created Successfully!");
-                break;
+		        System.out.print("Enter initial balance: ");
+		        double initialBalance = scanner.nextDouble();
 
-            case "zerobalance":
-                ZeroBalanceAccount zeroBalanceAccount = new ZeroBalanceAccount(accountNumber, balance, customer);
-                bankServiceProvider.createAccount(zeroBalanceAccount);
-                System.out.println("Zero Balance Account Created Successfully!");
-                break;
+		        switch (accountTypeChoice) {
+		            case 1:
+		                bankServiceProvider.createAccount(customer, Account.generateAccountid(), "Savings", initialBalance);
+		                break;
+		            case 2:
+		                bankServiceProvider.createAccount(customer, Account.generateAccountid(), "Current", initialBalance);
+		                break;
+		            case 3:
+		                bankServiceProvider.createAccount(customer, Account.generateAccountid(), "ZeroBalance", initialBalance);
+		                break;
+		            default:
+		                System.out.println("Invalid account type choice.");
+		        }
+		    }
 
-            default:
-                System.out.println("Invalid Account Type! Please choose a valid type.");
-                break;
-        }
-    }
 
-    // Method to generate a unique account number (this is just an example; adjust accordingly)
-    private static long generateAccountNumber() {
-        // Implement your logic for generating a unique account number (e.g., random or sequential)
-        return (long) (Math.random() * 1000000); // Example, generates a random number
-    }
-}
+		    private static void depositMenu(IBankServiceProvider bankServiceProvider, Scanner scanner) throws Exception {
+		        BankServiceProviderImpl bankService = (BankServiceProviderImpl) bankServiceProvider;
+		        System.out.print("Enter account number to deposit into: ");
+		        long accountid = scanner.nextLong();
+
+		        System.out.print("Enter deposit amount: ");
+		        double amount = scanner.nextDouble();
+
+		        try {
+		            bankService.deposit(accountid, amount);
+		        } catch (InvalidAccountException e) {
+		            System.out.println("Invalid Account Number");
+		        }
+		    }
+
+		    private static void withdrawMenu(IBankServiceProvider bankServiceProvider, Scanner scanner) throws Exception {
+		        BankServiceProviderImpl bankService = (BankServiceProviderImpl) bankServiceProvider;
+		        System.out.print("Enter account number to withdraw from: ");
+		        long accountid = scanner.nextLong();
+
+		        System.out.print("Enter withdrawal amount: ");
+		        double amount = scanner.nextDouble();
+
+		        try {
+		            bankService.withdraw(accountid, amount);
+		        } catch (OverDraftLimitExceededException e) {
+		            System.out.println("Withdraw Failed");
+		        } catch (InvalidAccountException e) {
+		            System.out.println("Invalid Account withdraw Failed");
+		        }
+		    }
+
+		    private static void getBalanceMenu(IBankServiceProvider bankServiceProvider, Scanner scanner) {
+		        BankServiceProviderImpl bankService = (BankServiceProviderImpl) bankServiceProvider;
+		        System.out.print("Enter account number to get balance: ");
+		        long accountid = scanner.nextLong();
+
+		        try {
+		            double newBalance = bankService.getBalance(accountid);
+		            System.out.println("Current balance for account " + accountid + ": Rs." + newBalance);
+		        } catch (InvalidAccountException e
+
+		        ) {
+		            System.out.println("No account exist with account number " + accountid);
+		        }
+		    }
+
+		    private static void transferMenu(IBankServiceProvider bankServiceProvider, Scanner scanner) throws Exception {
+		        BankServiceProviderImpl bankService = (BankServiceProviderImpl) bankServiceProvider;
+		        
+		        // Get input for account IDs and amount to transfer
+		        System.out.print("Enter from account number: ");
+		        long fromAccountid = scanner.nextLong();
+
+		        System.out.print("Enter to account number: ");
+		        long toAccountid = scanner.nextLong();
+
+		        System.out.print("Enter transfer amount: ");
+		        double amount = scanner.nextDouble();
+
+		        // Try to transfer the amount
+		        try {
+		            // Call the transfer method with the correct parameters
+		            bankService.transfer(fromAccountid, toAccountid, (float) amount);
+		            System.out.println("Transfer successful");
+		        } catch (OverDraftLimitExceededException e) {
+		            System.out.println("Transfer Failed: Overdraft limit exceeded");
+		        } catch (InvalidAccountException e) {
+		            System.out.println("Transfer Failed: Invalid account");
+		        } catch (InsufficientFundException e) {
+		            System.out.println("Transfer Failed: Insufficient funds");
+		        } catch (Exception e) {
+		            System.out.println("Transfer Failed: " + e.getMessage());
+		        }
+		    }
+		    private static void getTransactionsBetweenDate(IBankServiceProvider bankServiceProvider, Scanner scanner) {
+				// TODO Auto-generated method stub
+		    	BankServiceProviderImpl bankService=(BankServiceProviderImpl) bankServiceProvider;
+		    	System.out.println("Enter account number:");
+		        long accountid = scanner.nextLong();
+
+		        System.out.println("Enter start date (YYYY-MM-DD):");
+		        String startDateStr = scanner.next();
+		        
+		        if (!isValidDateFormat(startDateStr, "yyyy-MM-dd")) {
+		            System.out.println("Invalid date format. Please use YYYY-MM-DD format.");
+		            return;
+		        }
+		        
+		        System.out.println("Enter end date (YYYY-MM-DD):");
+		        String endDateStr = scanner.next();
+
+		        if (!isValidDateFormat(endDateStr, "yyyy-MM-dd")) {
+		            System.out.println("Invalid date format. Please use YYYY-MM-DD format.");
+		            return; // Exit the method if the date format is invalid
+		        }
+		        
+		        List<Transactions> transactions = bankService.getTransactionsBetweenDate(accountid, startDateStr, endDateStr);
+
+		        if (transactions != null && !transactions.isEmpty()) {
+		            System.out.println("Transactions between " + startDateStr + " and " + endDateStr + ":");
+		            for (Transactions transaction : transactions) {
+		                System.out.println("Transaction Type: " + transaction.getTransaction_type());
+		                System.out.println("Transaction Amount: " + transaction.getAmount());
+		                System.out.println("Transaction ID: " + transaction.getTransactionid());
+		                System.out.println("Date and Time: " + transaction.getTransactiondate());
+		                System.out.println("-------------------------------------");
+		            }
+		        } else {
+		            System.out.println("No transactions found between " + startDateStr + " and " + endDateStr);
+		        }  
+		        
+			}   
+
+
+			private static void getAccountDetailsMenu(IBankServiceProvider bankServiceProvider, Scanner scanner) {
+		        BankServiceProviderImpl bankService = (BankServiceProviderImpl) bankServiceProvider;
+		        System.out.print("Enter from account number: ");
+		        long accountid = scanner.nextLong();
+		        try {
+		            System.out.println(bankService.getAccountDetails(accountid));
+		        } catch (InvalidAccountException e) {
+		            System.out.println("Invalid Account Number");
+		        }
+		    }
+
+		    private static void listAccounts(IBankServiceProvider bankServiceProvider) {
+		        System.out.println("===== List of Accounts =====");
+		        try {
+		            Map<Long, Account> accountList = bankServiceProvider.listAccounts();
+		            for (Map.Entry<Long, Account> entry : accountList.entrySet()) {
+		                Account account = entry.getValue();
+		                System.out.println("Account Number: " + account.getAccountid() +
+		                        ", Type: " + account.getAccounttype() +
+		                        ", Balance: Rs." + account.getBalance());
+		            }
+
+		        } catch (NullPointerException e) {
+		            System.out.println("NullPointerException caught: " + e.getMessage());
+		        }
+		    }
+
+		    private static boolean isValidDateFormat(String dateStr, String format) {
+		        try {
+		            SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+		            dateFormat.setLenient(false);
+		            dateFormat.parse(dateStr);
+		            return true;
+		        } catch (ParseException e) {
+		            return false;
+		        }
+		    }
+
+			public static String getLastname() {
+				return lastname;
+			}
+
+			public static void setLastname(String lastname) {
+				BankApp.lastname = lastname;
+			}
+
+			public static String getFirstname() {
+				return firstname;
+			}
+
+			public static void setFirstname(String firstname) {
+				BankApp.firstname = firstname;
+			}
+
+			public static int getCustomerid() {
+				return customerid;
+			}
+
+			public static void setCustomerid(int customerid) {
+				BankApp.customerid = customerid;
+			}
+
+			public static long getPhonenumber() {
+				return phonenumber;
+			}
+
+			public static void setPhonenumber(long phonenumber) {
+				BankApp.phonenumber = phonenumber;
+			}
+		}

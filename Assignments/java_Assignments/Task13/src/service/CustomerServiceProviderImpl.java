@@ -1,63 +1,46 @@
 package service;
 
-import entity.Account;
-import entity.CurrentAccount;
-import entity.SavingsAccount;
-import exception.InsufficientFundException;
-import exception.InvalidAccountException;
-import exception.OverDraftLimitExcededException;
-public class CustomerServiceProviderImpl implements ICustomerServiceProvider{
-	 protected Account[] accounts = new Account[100];
-	    protected int index = 0;
-	    protected Account findAccount(long accNo) {
-	        for (Account acc : accounts) {
-	            if (acc != null && acc.getAccountNumber() == accNo)
-	                return acc;
-	        }
-	        return null;
-	    }
-	    public float get_account_balance(long accNo) throws InvalidAccountException {
-	        Account acc = findAccount(accNo);
-	        if (acc == null) throw new InvalidAccountException("Account not found");
-	        return acc.getBalance();
-	    }
-	    public float deposit(long accNo, float amount) throws InvalidAccountException {
-	        Account acc = findAccount(accNo);
-	        if (acc == null) throw new InvalidAccountException("Account not found");
-	        acc.setBalance(acc.getBalance() + amount);
-	        return acc.getBalance();
-	    }
-	    public float withdraw(long accNo, float amount) throws InvalidAccountException, InsufficientFundException, OverDraftLimitExcededException {
-	        Account acc = findAccount(accNo);
-	        if (acc == null) throw new InvalidAccountException("Account not found");
+import java.util.List;
 
-	        if (acc instanceof SavingsAccount) {
-	            if (acc.getBalance() - amount < 500)
-	                throw new InsufficientFundException("Maintain min balance 500");
-	            acc.setBalance(acc.getBalance() - amount);
-	        } else if (acc instanceof CurrentAccount) {
-	            float available = acc.getBalance() + ((CurrentAccount) acc).getOverdraftLimit();
-	            if (amount > available)
-	                throw new OverDraftLimitExcededException("Overdraft limit exceeded");
-	            acc.setBalance(acc.getBalance() - amount);
-	        } else {
-	            if (acc.getBalance() < amount)
-	                throw new InsufficientFundException("Insufficient funds");
-	            acc.setBalance(acc.getBalance() - amount);
-	        }
-	        return acc.getBalance();
-	    }
-	    public void transfer(long fromAcc, long toAcc, float amount) throws InvalidAccountException, InsufficientFundException, OverDraftLimitExcededException {
-	        Account from = findAccount(fromAcc);
-	        Account to = findAccount(toAcc);
-	        if (from == null || to == null)
-	            throw new InvalidAccountException("One or both account numbers are invalid");
-	        withdraw(fromAcc, amount);
-	        deposit(toAcc, amount);
-	    }
-	    public String getAccountDetails(long accNo) throws InvalidAccountException {
-	        Account acc = findAccount(accNo);
-	        if (acc == null) throw new InvalidAccountException("Account not found");
-	        return acc.toString();
-	    }
-}
+import entity.Customer;
+import entity.Transactions;
+import exception.InvalidAccountException;
+public class CustomerServiceProviderImpl implements ICustomerServiceProvider {
+
+    @Override
+    public double getBalance(long accountid) throws InvalidAccountException {
+
+        return 0;
+    }
+
+    @Override
+    public double deposit(long accountid, double amount) throws Exception {
+
+
+        return amount;
+    }
+    @Override
+    public double withdraw(long accountid, double amount) throws Exception {
+        return 0.0;
+    }
+    @Override
+    public void transfer(long fromAccountid, long toAccountid, double amount) throws Exception {
+        System.out.println("Transferred Rs." + amount + " fromAccount " + fromAccountid + " to account " + toAccountid);
+    }
+    @Override
+    public String getAccountDetails(long accountid) throws InvalidAccountException {
+        return "Account details for account number " + accountid;
+    }
+    @Override
+	public List<Transactions> getTransactionsBetweenDate(long accountid, String startDate, String endDate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+    public static boolean validateCustomerData(Customer customer) {
+        return customer != null &&
+               customer.getFirstname() != null && customer.getFirstname().length() > 2 &&
+               customer.getEmail() != null && customer.getEmail().contains("@") &&
+               customer.getPhonenumber() != null && customer.getPhonenumber().length() >= 10;
+    }
+
+    }

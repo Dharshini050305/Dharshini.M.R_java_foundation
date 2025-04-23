@@ -1,20 +1,15 @@
 package entity;
 
 public class CurrentAccount extends Account {
-    private double overdraftLimit;
-
-    // Constructor for CurrentAccount
-    public CurrentAccount(long accountNumber, double balance, Customer customer, double overdraftLimit) {
-        super(accountNumber, balance, customer);
+	private final double overdraftLimit;
+    public CurrentAccount(double overdraftLimit, Customer customer) {
+        super("Current", 0.0F, customer);
         this.overdraftLimit = overdraftLimit;
     }
 
     @Override
-    public String getAccountType() {
-        return "Current";
-    }
-
-    public double getOverdraftLimit() {
-        return overdraftLimit;
+    public void printAccountInfo() {
+        super.printAccountInfo();
+        System.out.println("Overdraft Limit: Rs." + overdraftLimit);
     }
 }

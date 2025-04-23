@@ -10,7 +10,7 @@ public abstract class BankAccount {
         this.customerName="null";
         this.balance=0.0f;
     }
-    //parametrized constructor
+    //parameterized constructor
     public BankAccount(int AccountNumber, String CustomerName, float Balance){
         this.accountNumber=AccountNumber;
         this.customerName=CustomerName;

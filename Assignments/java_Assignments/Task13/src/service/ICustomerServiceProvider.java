@@ -1,16 +1,20 @@
 package service;
 
-import entity.*;
-import exception.InsufficientFundException;
+import java.util.List;
+
+import entity.Transactions;
 import exception.InvalidAccountException;
-import exception.OverDraftLimitExcededException;
 public interface ICustomerServiceProvider {
-	 float get_account_balance(long accountNumber) throws InvalidAccountException;
-	    float deposit(long accountNumber, float amount) throws InvalidAccountException;
-	    float withdraw(long accountNumber, float amount)
-	        throws InvalidAccountException, InsufficientFundException, OverDraftLimitExcededException;
-	    void transfer(long fromAccountNumber, long toAccountNumber, float amount)
-	        throws InvalidAccountException, InsufficientFundException, OverDraftLimitExcededException;
-	    String getAccountDetails(long accountNumber) throws InvalidAccountException;
+	 double getBalance(long accountid) throws InvalidAccountException;
+
+	    double deposit(long accountid, double amount) throws Exception;
+
+	    double withdraw(long accountid, double amount) throws Exception;
+
+	    void transfer(long fromAccountid, long toAccountid, double amount) throws Exception;
+
+	    String getAccountDetails(long accountid) throws InvalidAccountException;
+
+		List<Transactions> getTransactionsBetweenDate(long accountid, String startDate, String endDate);
 
 }
